@@ -12,4 +12,4 @@ docker run -d --name mysql57 -e MYSQL_ROOT_PASSWORD=3165ilcy -p 3306:3306 -v $PW
 # 启动php7.2环境
 docker run -d --name php_fpm -v $PWD/www:/data/www --network=myproxy --restart=always registry.cn-shanghai.aliyuncs.com/yeqing112/php:7.3-fpm-alpine
 # 启动nginx
-docker run -d --name nginx -p 80:80 -p 443:443 -v $PWD/www:/data/www -v $PWD/nginx/conf.d:/etc/nginx/conf.d -v $PWD/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf -v $PWD/ssl:/etc/nginx/ssl --network=myproxy --restart=always registry.cn-shanghai.aliyuncs.com/yeqing112/nginx:1.19.1
+docker run -d --name nginx -p 80:80 -p 443:443 -v $PWD/www:/data/www -v $PWD/nginx/conf.d:/etc/nginx/conf.d -v $PWD/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf -v $PWD/nginx/rewrite.conf:/etc/nginx/rewrite.conf -v $PWD/ssl:/etc/nginx/ssl --network=myproxy --restart=always registry.cn-shanghai.aliyuncs.com/yeqing112/nginx:1.19.1
