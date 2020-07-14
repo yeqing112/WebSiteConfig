@@ -1,9 +1,9 @@
 #!/bin/bash
 cd ~
 mkdir mysite && cd mysite
-wget https://github.com/yeqing112/webSiteConfig/archive/1.0.0.tar.gz \
-&& tar -zxvf 1.0.0.tar.gz \
-&& cd webSiteConfig-1.0.0
+wget https://github.com/yeqing112/webSiteConfig/archive/1.0.2.tar.gz \
+&& tar -zxvf 1.0.2.tar.gz \
+&& cd webSiteConfig-1.0.2
 mkdir data
 # 创建容器网络
 docker network create myproxy
