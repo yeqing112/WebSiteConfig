@@ -1,10 +1,10 @@
 #!/bin/bash
 cd ~
-wget https://github.com/yeqing112/webSiteConfig/archive/1.0.5.tar.gz \
-&& tar -zxvf 1.0.5.tar.gz
+wget https://github.com/yeqing112/webSiteConfig/archive/1.0.6.tar.gz \
+&& tar -zxvf 1.0.6.tar.gz
 mkdir /data
 cd /data
-cp -r ~/webSiteConfig-1.0.5/* /data
+cp -r ~/webSiteConfig-1.0.6/* /data
 # 创建容器网络
 docker network create myproxy
 # 启动数据库
