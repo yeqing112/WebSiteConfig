@@ -1,15 +1,15 @@
 #!/bin/bash
 cd ~
-wget https://github.com/yeqing112/webSiteConfig/archive/1.0.7.tar.gz \
-&& tar -zxvf 1.0.7.tar.gz
+wget https://github.com/yeqing112/webSiteConfig/archive/1.0.8.tar.gz \
+&& tar -zxvf 1.0.8.tar.gz
 mkdir /data
 cd /data
-cp -r ~/webSiteConfig-1.0.7/* /data
+cp -r ~/webSiteConfig-1.0.8/* /data
 # 创建容器网络
 docker network create myproxy
 # 启动数据库
 docker run -dit --name mysql57 \
-	-e MYSQL_ROOT_PASSWORD=3165ilcy \
+	-e MYSQL_ROOT_PASSWORD=123456 \
 	-p 3306:3306 \
 	-v $PWD/data:/var/lib/mysql \
 	--network=myproxy \
