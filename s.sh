@@ -1,10 +1,11 @@
 #!/bin/bash
+INSTALLSH_VERSION = 1.0.8
 cd ~
-wget https://github.com/yeqing112/webSiteConfig/archive/1.0.8.tar.gz \
-&& tar -zxvf 1.0.8.tar.gz
+wget https://github.com/yeqing112/webSiteConfig/archive/${INSTALLSH_VERSION}.tar.gz \
+&& tar -zxvf ${INSTALLSH_VERSION}.tar.gz
 mkdir /data
 cd /data
-cp -r ~/webSiteConfig-1.0.8/* /data
+cp -r ~/webSiteConfig-${INSTALLSH_VERSION}/* /data
 # 创建容器网络
 docker network create myproxy
 # 启动数据库
