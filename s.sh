@@ -1,5 +1,5 @@
 #!/bin/bash
-INSTALLSH_VERSION = 1.0.8
+INSTALLSH_VERSION=1.0.8
 cd ~
 wget https://github.com/yeqing112/webSiteConfig/archive/${INSTALLSH_VERSION}.tar.gz \
 && tar -zxvf ${INSTALLSH_VERSION}.tar.gz
