@@ -1,11 +1,19 @@
 #!/bin/bash
 INSTALLSH_VERSION=1.0.10
+echo -e "请输入域名，多个域名请用空格分隔: \c"
+    read domain
+    if  [ ! -n "${domain}" ] ; then
+    echo "域名不能为空!"
+    exit
+    fi
 cd ~
 wget https://github.com/yeqing112/webSiteConfig/archive/${INSTALLSH_VERSION}.tar.gz \
 && tar -zxvf ${INSTALLSH_VERSION}.tar.gz
 mkdir /data
 cd /data
 cp -r ~/webSiteConfig-${INSTALLSH_VERSION}/* /data
+# 修改域名
+sed -i "s/www.173top.cn/${domain}/g" /data/nginx/conf.d/default.conf
 # 创建容器网络
 docker network create myproxy
 # 启动数据库
