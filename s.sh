@@ -18,8 +18,6 @@ inputData(){
 	echo "域名不能为空!"
 	exit
 	fi
-	
-	# 如果有443端口，则
 }
 
 downloadConfig(){
