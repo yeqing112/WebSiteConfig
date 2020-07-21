@@ -18,6 +18,8 @@ inputData(){
 	echo "域名不能为空!"
 	exit
 	fi
+	
+	# 如果有443端口，则
 }
 
 downloadConfig(){
@@ -31,7 +33,7 @@ downloadConfig(){
 
 setupWebsite(){
 	# 设置域名
-	sed -i "s/{w:domain:w}/\tserver_name  $domain/g" /data/nginx/conf.d/default.conf
+	sed -i "s/{w:domain:w}/\tserver_name  $domain;/g" /data/nginx/conf.d/default.conf
 	
 	# 设置端口
 	strPort=""
