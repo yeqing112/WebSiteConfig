@@ -6,7 +6,7 @@ inputData(){
 	# 域名
 	echo -e "请输入域名，多个域名请用空格分隔: \c"
 	read domain
-	if  [ ! -n "${domain}" ] ; then
+	if  [ ! -n "$domain" ] ; then
 	echo "域名不能为空!"
 	exit
 	fi
@@ -14,7 +14,7 @@ inputData(){
 	# 端口
 	echo -e "请输入端口，多个端口请用空格分隔: \c"
 	read port
-	if  [ ! -n "${port}" ] ; then
+	if  [ ! -n "$port" ] ; then
 	echo "域名不能为空!"
 	exit
 	fi
@@ -31,10 +31,18 @@ downloadConfig(){
 
 setupWebsite(){
 	# 设置域名
-	sed -i "s/{w:domain:w}/${domain}/g" /data/nginx/conf.d/default.conf
+	sed -i "s/{w:domain:w}/\tserver_name  $domain/g" /data/nginx/conf.d/default.conf
 	
 	# 设置端口
-	sed -i "s/{w:port:w}/${port}/g" /data/nginx/conf.d/default.conf
+	strPort=""
+	for str in ${port[@]};do
+		if [ $str == 443 ]; then
+			strPort=$strPort"\tlisten  $str ssl;\n"
+		else
+			strPort=$strPort"\tlisten  $str;\n"
+		fi
+	done
+	sed -i "s/{w:port:w}/$strPort/g" /data/nginx/conf.d/default.conf
 }
 
 dockerRun(){
