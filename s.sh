@@ -1,6 +1,6 @@
 #!/bin/bash
 # 版本
-INSTALLSH_VERSION=1.0.11
+INSTALLSH_VERSION=1.0.12
 
 inputData(){
 	# 域名
