@@ -1,7 +1,7 @@
 #!/bin/bash
 # 版本
 INSTALLSH_VERSION=1.0.15
-
+ssl="off"
 inputData(){
 	# 域名
 	echo -e "请输入域名，多个域名请用空格分隔: \c"
@@ -40,6 +40,7 @@ setupWebsite(){
 	for str in ${port[@]};do
 		if [ $str == 443 ]; then
 			strPort=$strPort"\tlisten  $str ssl;\n"
+			ssl="on"
 		else
 			strPort=$strPort"\tlisten  $str;\n"
 		fi
@@ -47,13 +48,11 @@ setupWebsite(){
 	sed -i "s/{w:port:w}/$strPort/g" /data/nginx/conf.d/default.conf
 	
 	# 如果有443端口，则配置证书
-	for str in ${port[@]};do
-		if [ $str == 443 ]; then
-			sed -i "s/{w:certificate:w}/\ninclude ssl.conf/g" /data/nginx/conf.d/default.conf
-		else
-			sed -i "s/{w:certificate:w}//g" /data/nginx/conf.d/default.conf
-		fi
-	done
+	if [ $ssl == "on" ]; then
+		sed -i "s/{w:certificate:w}/\tinclude ssl.conf;/g" /data/nginx/conf.d/default.conf
+	else
+		sed -i "s/{w:certificate:w}//g" /data/nginx/conf.d/default.conf
+	fi
 }
 
 dockerRun(){
