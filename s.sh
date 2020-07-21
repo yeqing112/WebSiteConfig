@@ -45,6 +45,15 @@ setupWebsite(){
 		fi
 	done
 	sed -i "s/{w:port:w}/$strPort/g" /data/nginx/conf.d/default.conf
+	
+	# 如果有443端口，则配置证书
+	for str in ${port[@]};do
+		if [ $str == 443 ]; then
+			sed -i "s/{w:certificate:w}/\ninclude ssl.conf/g" /data/nginx/conf.d/default.conf
+		else
+			sed -i "s/{w:certificate:w}//g" /data/nginx/conf.d/default.conf
+		fi
+	done
 }
 
 dockerRun(){
@@ -75,7 +84,8 @@ dockerRun(){
 		-v $PWD/nginx/conf.d:/etc/nginx/conf.d \
 		-v $PWD/nginx/fastcgi.conf:/etc/nginx/fastcgi.conf \
 		-v $PWD/nginx/rewrite.conf:/etc/nginx/rewrite.conf \
-		-v $PWD/ssl:/etc/nginx/ssl \
+		-v $PWD/nginx/ssl.conf:/etc/nginx/ssl.conf \
+		-v $PWD/nginx/ssl:/etc/nginx/ssl \
 		--network=myproxy \
 		--restart=always \
 		registry.cn-shanghai.aliyuncs.com/yeqing112/nginx:1.19.1
