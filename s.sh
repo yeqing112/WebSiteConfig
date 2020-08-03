@@ -1,6 +1,6 @@
 #!/bin/bash
 # 版本
-INSTALLSH_VERSION=1.0.15
+INSTALLSH_VERSION=1.0.16
 ssl="off"
 inputData(){
 	# 域名
@@ -16,6 +16,22 @@ inputData(){
 	read port
 	if  [ ! -n "$port" ] ; then
 	echo "域名不能为空!"
+	exit
+	fi
+
+	# 数据库名称
+	echo -e "请输入数据库名称: \c"
+	read dbname
+	if  [ ! -n "$dbname" ] ; then
+	echo "数据库名称不能为空!"
+	exit
+	fi	
+
+	# 数据库密码
+	echo -e "请输入数据库密码: \c"
+	read password
+	if  [ ! -n "$password" ] ; then
+	echo "密码不能为空!"
 	exit
 	fi
 }
@@ -51,6 +67,10 @@ setupWebsite(){
 	else
 		sed -i "s/{w:certificate:w}//g" /data/nginx/conf.d/default.conf
 	fi
+	
+	# 写入数据库相关配置
+	sed -i "s/{w:dbname:w}/$dbname/g" /data/db.sh
+	sed -i "s/{w:password:w}/$password/g" /data/db.sh
 }
 
 dockerRun(){
@@ -58,7 +78,7 @@ dockerRun(){
 	docker network create myproxy
 	# 启动数据库
 	docker run -dit --name mysql57 \
-		-e MYSQL_ROOT_PASSWORD=123456 \
+		-e MYSQL_ROOT_PASSWORD=$password \
 		-p 3306:3306 \
 		-v $PWD/data:/var/lib/mysql \
 		--network=myproxy \
@@ -94,6 +114,12 @@ dockerRun(){
 		registry.cn-shanghai.aliyuncs.com/yeqing112/phpmyadmin:latest
 }
 
+createDB(){
+	docker cp /data/db.sh mysql57:/home/db.sh
+	docker exec -it mysql57 chmod +x /home/db.sh
+	docker exec -it mysql57 /bin/bash /home/db.sh && docker exec -it mysql57 /bin/bash /home/db.sh
+}
+
 cleanup(){
     echo -e "\033[32m 恭喜您,安装成功.在浏览器输入域名即可访问. \033[0m"
 }
@@ -114,4 +140,5 @@ inputData
 downloadConfig
 setupWebsite
 dockerRun
+createDB
 cleanup
