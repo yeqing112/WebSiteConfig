@@ -1,6 +1,5 @@
 #!/bin/bash
-# 版本
-INSTALLSH_VERSION=1.0.16
+INSTALLSH_VERSION=1.0.17
 ssl="off"
 inputData(){
 	# 域名
@@ -18,6 +17,14 @@ inputData(){
 	echo "域名不能为空!"
 	exit
 	fi
+	
+	# php版本
+	echo -e "请选择PHP版本（1.php5.6 | 2.php7.2 ）,填数字即可：\c"
+	read phpVersion
+	if  [ ! -n "$phpVersion" ] ; then
+	echo "PHP版本不能为空!"
+	exit
+	fi	
 
 	# 数据库名称
 	echo -e "请输入数据库名称: \c"
@@ -73,6 +80,27 @@ setupWebsite(){
 	sed -i "s/{w:password:w}/$password/g" /data/db.sh
 }
 
+php5(){
+	docker run -dit --name php_fpm \
+		-v $PWD/www:/data/www \
+		-v $PWD/php5/php-fpm.conf:/etc/php5/php-fpm.conf \
+		-v $PWD/php5/php.ini:/etc/php5/php.ini \
+		--network=myproxy \
+		--restart=always \
+		registry.cn-shanghai.aliyuncs.com/yeqing112/php:5.6-fpm-alpine
+}
+
+php7(){
+	docker run -dit --name php_fpm \
+		-v $PWD/www:/data/www \
+		-v $PWD/php7/php-fpm.d/www.conf:/etc/php7/php-fpm.d/www.conf \
+		-v $PWD/php7/php-fpm.conf:/etc/php7/php-fpm.conf \
+		-v $PWD/php7/php.ini:/etc/php7/php.ini \
+		--network=myproxy \
+		--restart=always \
+		registry.cn-shanghai.aliyuncs.com/yeqing112/php:7.3-fpm-alpine
+}
+
 dockerRun(){
 	# 创建容器网络
 	docker network create myproxy
@@ -84,15 +112,12 @@ dockerRun(){
 		--network=myproxy \
 		--restart=always \
 		registry.cn-shanghai.aliyuncs.com/yeqing112/mysql:5.7
-	# 启动php7.2环境
-	docker run -dit --name php_fpm \
-		-v $PWD/www:/data/www \
-		-v $PWD/php7/php-fpm.d/www.conf:/etc/php7/php-fpm.d/www.conf \
-		-v $PWD/php7/php-fpm.conf:/etc/php7/php-fpm.conf \
-		-v $PWD/php7/php.ini:/etc/php7/php.ini \
-		--network=myproxy \
-		--restart=always \
-		registry.cn-shanghai.aliyuncs.com/yeqing112/php:7.3-fpm-alpine
+	# 启动php环境
+	if [ $phpVersion == "1" ]; then
+		php5()
+	else
+		php7()
+	fi
 	# 启动nginx
 	docker run -dit --name nginx \
 		-p 80:80 -p 443:443 \
@@ -130,6 +155,7 @@ echo "------------------------------------------"
 echo "           脚本将完成以下内容:"
 echo "           1. 配置网站域名"
 echo "           2. 配置网站端口"
+echo "           3. 选择PHP版本"
 echo "           3. 安装MySQL 5.7"
 echo "           4. 安装PHP 7.2"
 echo "           5. 安装Nginx 1.19"
