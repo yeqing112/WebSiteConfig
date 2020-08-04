@@ -114,9 +114,9 @@ dockerRun(){
 		registry.cn-shanghai.aliyuncs.com/yeqing112/mysql:5.7
 	# 启动php环境
 	if [ $phpVersion == "1" ]; then
-		php5()
+		php5
 	else
-		php7()
+		php7
 	fi
 	# 启动nginx
 	docker run -dit --name nginx \
