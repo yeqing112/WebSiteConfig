@@ -1,5 +1,5 @@
 #!/bin/bash
-INSTALLSH_VERSION=1.0.17
+INSTALLSH_VERSION=1.0.18
 ssl="off"
 inputData(){
 	# 域名
@@ -19,7 +19,7 @@ inputData(){
 	fi
 	
 	# php版本
-	echo -e "请选择PHP版本（1.php5.6 | 2.php7.2 ）,填数字即可：\c"
+	echo -e "请选择PHP版本（1.php5.6 | 2.php7.2 ），填写相应数字：\c"
 	read phpVersion
 	if  [ ! -n "$phpVersion" ] ; then
 	echo "PHP版本不能为空!"
